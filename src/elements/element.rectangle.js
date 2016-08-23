@@ -8,7 +8,8 @@ module.exports = function(Chart) {
 		backgroundColor: globalOpts.defaultColor,
 		borderWidth: 0,
 		borderColor: globalOpts.defaultColor,
-		borderSkipped: 'bottom'
+		borderSkipped: 'bottom',
+		borderRadius: true
 	};
 
 	Chart.elements.Rectangle = Chart.Element.extend({
@@ -34,15 +35,15 @@ module.exports = function(Chart) {
 			ctx.fillStyle = vm.backgroundColor;
 			ctx.strokeStyle = vm.borderColor;
 			ctx.lineWidth = vm.borderWidth;
+			ctx.borderRadius = vm.borderRadius;
 
 			// Corner points, from bottom-left to bottom-right clockwise
 			// | 1 2 |
 			// | 0 3 |
 			var corners = [
 				[leftX, vm.base],
-				[leftX, (top + 4)],
-				[((( rightX - leftX ) / 2) + leftX ), (top - 4)],
-				[rightX, (top + 4)],
+				[leftX, top],
+				[rightX, top],
 				[rightX, vm.base]
 			];
 
@@ -67,11 +68,12 @@ module.exports = function(Chart) {
 			// Draw rectangle from 'startCorner'
 			ctx.moveTo.apply(ctx, cornerAt(0));
 			for (var i = 0; i < corners.length; i++)
-				if ( i != 1 || i != 2 ){
+				if ( i != 1 && ( i != 1 && !ctx.borderRadius) ){
 					ctx.lineTo.apply(ctx, cornerAt(i));
 				}
 				else {
-					ctx.quadraticCurveTo.apply( ctx, 50, cornerAt(i) );
+					ctx.lineTo.apply(ctx, cornerAt(i));
+					//ctx.quadraticCurveTo.apply( ctx, 50, cornerAt(i) );
 				}
 
 			ctx.fill();
