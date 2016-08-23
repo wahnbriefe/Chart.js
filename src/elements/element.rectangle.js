@@ -73,7 +73,7 @@ module.exports = function(Chart) {
 				// console.log(ctx);
 				ctx.lineTo.apply( ctx, corners[1] ); // [leftX, top]
 				// ctx.quadraticCurveTo( leftX, (top - 50), rightX, top );
-				ctx.bezierCurveTo( leftX, (top - vm.width), rightX, (top - vm.width), rightX, top );
+				ctx.bezierCurveTo( leftX, (top - 50), rightX, (top - 50), rightX, top );
 				ctx.lineTo.apply( ctx, corners[3] );
 				// http://www.w3schools.com/tags/canvas_beziercurveto.asp
 			}
