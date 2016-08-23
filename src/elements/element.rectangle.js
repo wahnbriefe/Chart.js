@@ -40,10 +40,19 @@ module.exports = function(Chart) {
 			// | 0 3 |
 			var corners = [
 				[leftX, vm.base],
-				[leftX, top],
-				[rightX, top],
+				[leftX, (top + 4)],
+				[((( rightX - leftX ) / 2) + leftX ), (top - 4)],
+				[rightX, (top + 4)],
 				[rightX, vm.base]
 			];
+
+			// console.log(corners[0]);
+			// console.log(corners[4]);
+			// console.log(".......................");
+			// console.log(corners[2]);
+			// console.log(".......................");
+
+			// http://fiddle.jshell.net/leighking2/fmpu4gyt/
 
 			// Find first (starting) corner with fallback to 'bottom'
 			var borders = ['bottom', 'left', 'top', 'right'];
@@ -52,13 +61,18 @@ module.exports = function(Chart) {
 				startCorner = 0;
 
 			function cornerAt(index) {
-				return corners[(startCorner + index) % 4];
+				return corners[(startCorner + index) % 5];
 			}
 
 			// Draw rectangle from 'startCorner'
 			ctx.moveTo.apply(ctx, cornerAt(0));
-			for (var i = 1; i < 4; i++)
-				ctx.lineTo.apply(ctx, cornerAt(i));
+			for (var i = 0; i < corners.length; i++)
+				if ( i != 1 || i != 2 ){
+					ctx.lineTo.apply(ctx, cornerAt(i));
+				}
+				else {
+					ctx.quadraticCurveTo.apply( ctx, 50, cornerAt(i) );
+				}
 
 			ctx.fill();
 			if (vm.borderWidth) {
