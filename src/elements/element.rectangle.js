@@ -2,14 +2,15 @@
 
 module.exports = function(Chart) {
 
+	var borderRadius = true; // make an optional setting laters
+
 	var globalOpts = Chart.defaults.global;
 
 	globalOpts.elements.rectangle = {
 		backgroundColor: globalOpts.defaultColor,
 		borderWidth: 0,
 		borderColor: globalOpts.defaultColor,
-		borderSkipped: 'bottom',
-		borderRadius: true
+		borderSkipped: 'bottom'
 	};
 
 	Chart.elements.Rectangle = Chart.Element.extend({
@@ -35,7 +36,7 @@ module.exports = function(Chart) {
 			ctx.fillStyle = vm.backgroundColor;
 			ctx.strokeStyle = vm.borderColor;
 			ctx.lineWidth = vm.borderWidth;
-			ctx.borderRadius = vm.borderRadius;
+			ctx.borderRadius = borderRadius;
 
 			// Corner points, from bottom-left to bottom-right clockwise
 			// | 1 2 |
@@ -46,12 +47,6 @@ module.exports = function(Chart) {
 				[rightX, top],
 				[rightX, vm.base]
 			];
-
-			// console.log(corners[0]);
-			// console.log(corners[4]);
-			// console.log(".......................");
-			// console.log(corners[2]);
-			// console.log(".......................");
 
 			// http://fiddle.jshell.net/leighking2/fmpu4gyt/
 
@@ -67,14 +62,24 @@ module.exports = function(Chart) {
 
 			// Draw rectangle from 'startCorner'
 			ctx.moveTo.apply(ctx, cornerAt(0));
-			for (var i = 0; i < corners.length; i++)
-				if ( i != 1 && ( i != 1 && !ctx.borderRadius) ){
+
+			if (!ctx.borderRadius) {
+				for (var i = 1; i < corners.length; i++){
 					ctx.lineTo.apply(ctx, cornerAt(i));
 				}
-				else {
-					ctx.lineTo.apply(ctx, cornerAt(i));
-					//ctx.quadraticCurveTo.apply( ctx, 50, cornerAt(i) );
-				}
+			}
+			else {
+				console.log(ctx);
+				ctx.lineTo.apply( ctx, corners[1] ); // [leftX, top]
+				//ctx.quadraticCurveTo( leftX, (top - 50), rightX, top );
+				ctx.bezierCurveTo( leftX, (top - 50), rightX, (top - 50), rightX, top );
+				ctx.lineTo.apply( ctx, corners[3] );
+				// http://www.w3schools.com/tags/canvas_quadraticcurveto.asp
+				// 1	The x-coordinate of the Bézier control point
+				// 2	The y-coordinate of the Bézier control point
+				// 3	The x-coordinate of the ending point
+				// 4	The y-coordinate of the ending point
+			}
 
 			ctx.fill();
 			if (vm.borderWidth) {
