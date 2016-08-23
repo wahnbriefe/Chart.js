@@ -69,16 +69,13 @@ module.exports = function(Chart) {
 				}
 			}
 			else {
-				console.log(ctx);
+				// console.log(corners[1]);
+				// console.log(ctx);
 				ctx.lineTo.apply( ctx, corners[1] ); // [leftX, top]
-				//ctx.quadraticCurveTo( leftX, (top - 50), rightX, top );
-				ctx.bezierCurveTo( leftX, (top - 50), rightX, (top - 50), rightX, top );
+				// ctx.quadraticCurveTo( leftX, (top - 50), rightX, top );
+				ctx.bezierCurveTo( leftX, (top - vm.width), rightX, (top - vm.width), rightX, top );
 				ctx.lineTo.apply( ctx, corners[3] );
-				// http://www.w3schools.com/tags/canvas_quadraticcurveto.asp
-				// 1	The x-coordinate of the Bézier control point
-				// 2	The y-coordinate of the Bézier control point
-				// 3	The x-coordinate of the ending point
-				// 4	The y-coordinate of the ending point
+				// http://www.w3schools.com/tags/canvas_beziercurveto.asp
 			}
 
 			ctx.fill();
