@@ -64,24 +64,41 @@ module.exports = function(Chart) {
 			ctx.moveTo.apply(ctx, cornerAt(0));
 
 			if (!ctx.borderRadius) {
+
 				for (var i = 1; i < corners.length; i++){
 					ctx.lineTo.apply(ctx, cornerAt(i));
 				}
+
 			}
 			else {
-				// console.log(corners[1]);
-				// console.log(ctx);
-				ctx.lineTo.apply( ctx, corners[1] ); // [leftX, top]
-				// ctx.quadraticCurveTo( leftX, (top - 50), rightX, top );
-				ctx.bezierCurveTo( leftX, (top - 50), rightX, (top - 50), rightX, top );
-				ctx.lineTo.apply( ctx, corners[3] );
-				// http://www.w3schools.com/tags/canvas_beziercurveto.asp
+				ctx.lineTo( leftX, (top + 15) ); // [leftX, top]
+
+				ctx.quadraticCurveTo( (leftX + 15), top, ( leftX + halfWidth ), top );
+				ctx.quadraticCurveTo( ( leftX + halfWidth ), top, rightX, (top + 15) );
+
+				ctx.lineTo.apply( ctx, corners[3] ); // [rightX, vm.base]
 			}
 
+			// http://www.w3schools.com/tags/canvas_beziercurveto.asp
+			// http://www.w3schools.com/tags/canvas_quadraticcurveto.asp
+
+			/*
+				square edges:
+				ctx.lineTo( leftX, (top + 15) );
+
+				ctx.lineTo( (leftX + 15), top );
+				ctx.lineTo( (rightX - 15), top );
+				ctx.lineTo( rightX, (top + 15) );
+
+				ctx.lineTo.apply( ctx, corners[3] );
+			*/
+
 			ctx.fill();
+
 			if (vm.borderWidth) {
 				ctx.stroke();
 			}
+
 		},
 		height: function() {
 			var vm = this._view;
