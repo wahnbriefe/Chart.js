@@ -63,7 +63,13 @@ module.exports = function(Chart) {
 			// Draw rectangle from 'startCorner'
 			ctx.moveTo.apply(ctx, cornerAt(0));
 
-			if (!ctx.borderRadius) {
+			// stops rounded bars rendering under the X line
+			// if their height is less the the border radius
+			var heightTest = function(){
+				return (top + halfWidth) > vm.base;
+			};
+
+			if (!ctx.borderRadius || heightTest() ) {
 
 				for (var i = 1; i < corners.length; i++){
 					ctx.lineTo.apply(ctx, cornerAt(i));
