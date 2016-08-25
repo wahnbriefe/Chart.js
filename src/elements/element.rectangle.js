@@ -71,27 +71,14 @@ module.exports = function(Chart) {
 
 			}
 			else {
-				ctx.lineTo( leftX, (top + 15) ); // [leftX, top]
 
-				ctx.quadraticCurveTo( (leftX + 15), top, ( leftX + halfWidth ), top );
-				ctx.quadraticCurveTo( ( leftX + halfWidth ), top, rightX, (top + 15) );
+				ctx.lineTo( leftX, (top + halfWidth) );
+				ctx.quadraticCurveTo( leftX, top, (leftX + halfWidth), top );
+				ctx.lineTo( (rightX - halfWidth), top );
+				ctx.quadraticCurveTo( rightX, top, rightX, (top + halfWidth) );
+				ctx.lineTo( rightX, vm.base );
 
-				ctx.lineTo.apply( ctx, corners[3] ); // [rightX, vm.base]
 			}
-
-			// http://www.w3schools.com/tags/canvas_beziercurveto.asp
-			// http://www.w3schools.com/tags/canvas_quadraticcurveto.asp
-
-			/*
-				square edges:
-				ctx.lineTo( leftX, (top + 15) );
-
-				ctx.lineTo( (leftX + 15), top );
-				ctx.lineTo( (rightX - 15), top );
-				ctx.lineTo( rightX, (top + 15) );
-
-				ctx.lineTo.apply( ctx, corners[3] );
-			*/
 
 			ctx.fill();
 
