@@ -60,29 +60,42 @@ module.exports = function(Chart) {
 				return corners[(startCorner + index) % 5];
 			}
 
-			// Draw rectangle from 'startCorner'
-			ctx.moveTo.apply(ctx, cornerAt(0));
-
 			// stops rounded bars rendering under the X line
 			// if their height is less the the border radius
-			var heightTest = function(){
+			function heightTest(){
 				return (top + halfWidth) > vm.base;
 			};
 
+			function drawWidthRadius( radiusOffset ){
+				ctx.lineTo( leftX, radiusOffset );
+				ctx.quadraticCurveTo( leftX, top, (leftX + halfWidth), top );
+				ctx.lineTo( (rightX - halfWidth), top );
+				ctx.quadraticCurveTo( rightX, top, rightX, radiusOffset );
+				ctx.lineTo( rightX, vm.base );
+			}
+
+			// Draw rectangle from 'startCorner'
+			ctx.moveTo.apply(ctx, cornerAt(0));
+
 			if (!ctx.borderRadius || heightTest() ) {
 
-				for (var i = 1; i < corners.length; i++){
-					ctx.lineTo.apply(ctx, cornerAt(i));
+				if ( (top - halfWidth) > vm.base ){
+
+					drawWidthRadius( (top - halfWidth) );
+
+				}
+				else {
+
+					for (var i = 1; i < corners.length; i++){
+						ctx.lineTo.apply(ctx, cornerAt(i));
+					}
+
 				}
 
 			}
 			else {
 
-				ctx.lineTo( leftX, (top + halfWidth) );
-				ctx.quadraticCurveTo( leftX, top, (leftX + halfWidth), top );
-				ctx.lineTo( (rightX - halfWidth), top );
-				ctx.quadraticCurveTo( rightX, top, rightX, (top + halfWidth) );
-				ctx.lineTo( rightX, vm.base );
+				drawWidthRadius( (top + halfWidth) );
 
 			}
 

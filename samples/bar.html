@@ -27,7 +27,7 @@
         var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
         var randomScalingFactor = function() {
-            return (Math.random() > 0.5 ? 1.0 : 0) * Math.round(Math.random() * 100);
+            return (Math.random() > 0.5 ? 1.0 : -1) * Math.round(Math.random() * 100);
         };
         var randomColorFactor = function() {
             return Math.round(Math.random() * 255);
